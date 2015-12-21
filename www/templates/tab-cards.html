@@ -1,0 +1,125 @@
+<ion-view view-title="Cards">
+<style> .tabs { display: none; } </style>
+  <ion-pane ng-controller="CardsCtrl">
+    <ion-header-bar class="bar-default">
+      <h1 class="title">Cards</h1>
+    </ion-header-bar>
+
+
+      <div class="td-title">
+        <div class="row">
+          <div class="col">Master: <span>{{ cards.master.length }}</span></div>
+          <div class="col">Cards: <span>{{ cards.active.length }}</span></div>
+          <div class="col">Discards: <span>{{ cards.discards.length }}</span></div>
+        </div>
+        <div class="row">
+          <div class="col">Disliked: <span>{{ cards.disliked.length }}</span></div>
+          <div class="col">Liked: <span>{{ cards.liked.length }}</span></div>
+        </div>
+      </div>
+
+      <div class="td-footer">
+        <div class="row">
+          <div class="col">
+            <button ng-click="removeCard()" class="button button-outline button-royal">Remove</button>
+          </div>
+          <div class="col">Active: <span>{{ cards.active.length }}</span></div>
+          <div class="col">Selected: <span>{{ cards.selected.length }}</span></div>
+        </div>
+      </div>
+
+
+      <!-- *************************
+        TD Cards
+        - We start off with an ng-if so that the cards are not generated
+          unless $scope.cards is not 'null'
+      ************************* -->
+      <div ng-if="cards.active">
+        <swipe-cards>
+          <swipe-card class=" card-index-{{$index}}" ng-repeat="card in cards.active" 
+                  on-swipe="cardSwiped($index)"
+                  on-swipe-up="setActiveCard($index)" 
+                  on-swipe-left="cardSwipedLeft($index)" 
+                  on-swipe-right="cardSwipedRight($index)"
+                  on-partial-swipe="cardPartialSwipe(amt)" 
+                  on-hold="onHold($index)"
+                  on-destroy="cardDestroyed($index)">
+
+            <div ng-controller="CardCtrl">
+              <!-- *************************
+                Discard
+                - The card is removed from the deck and a fly away animation is triggered.
+                - onClickTransitionOut is found in ionic.tdcards.js
+                - Animation can be customized by changing defaults
+              ************************* -->
+             <!--  <div class="discard" ng-click="onClickTransitionOut(card)">DISCARD</div> -->
+              
+
+
+
+              <span><b>card.id</b>{{card.id}}</span>
+              <br>
+
+              <div id="phrase_container">
+
+                <article class="card phrase {{ (showAlt == true) ? 'hiddenFlipInX' : 'showFlipInX' }}">
+                  <h1 class="td-title"><small>Phrase:</small>{{card.phrase}}</h1>
+                </article>
+
+                <article class="card alt-phrase {{ (showAlt == true) ? 'showFlipInX' : 'hiddenFlipInX' }}">
+                  <h1 class="td-title"><small>Alt-Phrase:</small>{{card.alt_phrase}}</h1>
+                </article>
+
+                <span class="yes-text hidden">Yes</span><span class="no-text hidden">No</span>
+              </div> <!-- #phrase_container -->
+            </div>
+          </swipe-card>
+          <!-- *************************
+            End Card
+            - 'drag' is set to false. The user cannot drag it.
+            - 'refreshCards()' reloads all cards that have NOT been discarded.
+                 <div class="empty" ng-if="!cards.length" drag="false">
+            <button ng-click="refreshCards()" class="button button-outline button-positive">Reload</button>
+          </div>
+           ************************* -->
+          <swipe-card id="end-card" drag="false" ng-if="!cards.length">
+            <i class="icon ion-ios-refresh disable-user-behavior" ng-click="refreshCards()"></i>
+          </swipe-card>
+         
+     
+
+        </swipe-cards>
+      </div>
+
+
+
+<!-- 
+
+    <td-cards control="cardsControl">
+      <td-card ng-repeat="card in cardsOfThree" 
+                on-destroy="cardDestroyed($index)" 
+                on-transition-left="cardSwipedLeft($index)" 
+                on-transition-right="cardSwipedRight($index)" 
+                on-partial-swipe="cardPartialSwipe(amt)" 
+                class="card-{{$index}}">
+
+        <div class="image" ng-controller="CardCtrl">
+
+          <h1>{{card.phrase}} <small>{{card.id}}</small></h1>
+          <h2>{{card.alt_phrase}}</h2>
+
+        </div>
+      </td-card>
+      <div class="control">
+        <button ng-click="noClick()" class="button button-outline button-assertive">No</button>
+        <button ng-click="yesClick()" class="button button-outline button-balanced">Yes</button>
+      </div>
+      <div class="empty" ng-if="!cards.length">
+        <button ng-click="reload()" class="button button-outline button-positive">Reload</button>
+      </div>
+
+ -->
+
+    </td-cards>
+  </ion-pane>
+</ion-view>
